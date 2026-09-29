@@ -577,6 +577,14 @@ void OpenDustAgentServer::_handle_message(Session &p_session, const String &p_te
 	}
 	Dictionary msg = parsed;
 	Variant id = msg.get("id", Variant());
+	// Godot's JSON parser yields doubles for every number; JSON-RPC ids must be echoed as sent,
+	// so integral floats go back as integers.
+	if (id.get_type() == Variant::FLOAT) {
+		double f = id;
+		if (f == Math::floor(f) && Math::abs(f) < 9007199254740992.0) {
+			id = (int64_t)f;
+		}
+	}
 	bool is_notification = !msg.has("id");
 	String method = msg.get("method", "");
 	if (method.is_empty()) {
