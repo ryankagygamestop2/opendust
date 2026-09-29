@@ -32,6 +32,13 @@ Updated 2026-09-29. Honest about what's real.
   wiring, input simulation for play-testing, material/animation/particle helpers. Study their tool
   lists before writing ours; see journal 2026-09-29 12:43.
 - Evaluate the editor agent on GameDevBench (arXiv 2602.11103) once a windowed session works.
+- Two seams for pixel-in/action-out agents (NitroGen, SIMA 2, Lumine all play through the human
+  interface): (1) `world.capture` streaming at a fixed rate with an async readback path instead of
+  a per-call synchronous `get_image()`; (2) `world.input {action|key|mouse}` to inject
+  `InputEvent`s, policy-gated, so an agent can press keys the way a player does. See journal
+  2026-09-29 13:13.
+- Read godot-proposals #12409 (integrated AI assistant) for the objections upstream raised; the
+  fork should answer them, not ignore them.
 
 - Agents dock: conversation panel per connected agent; spawn-from-soul
 - Agentic editor layout
