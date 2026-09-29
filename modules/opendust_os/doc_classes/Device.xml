@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="Device" inherits="Node3D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		A device in a 3D world that boots OpenDust OS on its screen.
+	</brief_description>
+	<description>
+		A tablet, phone, wall terminal or any other object with a screen. The device owns a [SubViewport] running an [OSShell] and a quad mesh that displays it. Entering the tree registers the device with the world's [OSKernel] (creating the kernel if this is the first device), and the [member boot_app] opens when the node is ready.
+		All devices in a world share the kernel's [WorldDrive], so a note written on one is readable on every other. Forward input events with [method push_input] to let a player interact with the screen.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_session" qualifiers="const">
+			<return type="Dictionary" />
+			<description>
+				The session signed in on this device.
+			</description>
+		</method>
+		<method name="get_room_id" qualifiers="const">
+			<return type="String" />
+			<description>
+				The [code]room_id[/code] of the nearest ancestor [code]Room[/code] (from the [code]opendust_slate[/code] module), or an empty string.
+			</description>
+		</method>
+		<method name="open_app">
+			<return type="void" />
+			<param index="0" name="app_id" type="String" />
+			<param index="1" name="args" type="Dictionary" default="{}" />
+			<description>
+			</description>
+		</method>
+		<method name="is_awake" qualifiers="const">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="wake">
+			<return type="void" />
+			<description>
+				Resumes rendering of the screen.
+			</description>
+		</method>
+		<method name="sleep">
+			<return type="void" />
+			<description>
+				Stops rendering the screen and dims it.
+			</description>
+		</method>
+		<method name="receive_message">
+			<return type="void" />
+			<param index="0" name="message" type="Dictionary" />
+			<description>
+				Called by the kernel when a bus message is delivered to this device. Shows a notification and emits [signal message_received].
+			</description>
+		</method>
+		<method name="push_input">
+			<return type="void" />
+			<param index="0" name="event" type="InputEvent" />
+			<description>
+				Forwards an input event to the screen's viewport (in the screen's local coordinates).
+			</description>
+		</method>
+		<method name="get_shell" qualifiers="const">
+			<return type="OSShell" />
+			<description>
+			</description>
+		</method>
+		<method name="get_screen_viewport" qualifiers="const">
+			<return type="SubViewport" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="device_id" type="String" setter="set_device_id" getter="get_device_id" default="&quot;&quot;">
+			Durable id of this device. Generated on first enter-tree if empty. Set it explicitly for devices that should keep their identity across saves.
+		</member>
+		<member name="screen_size_px" type="Vector2i" setter="set_screen_size_px" getter="get_screen_size_px" default="Vector2i(1024, 768)">
+			Resolution of the screen's viewport.
+		</member>
+		<member name="screen_size" type="Vector2" setter="set_screen_size" getter="get_screen_size" default="Vector2(0.32, 0.24)">
+			Physical size of the screen quad, in meters.
+		</member>
+		<member name="boot_app" type="String" setter="set_boot_app" getter="get_boot_app" default="&quot;os.home&quot;">
+			App opened when the device is ready.
+		</member>
+	</members>
+	<signals>
+		<signal name="message_received">
+			<param index="0" name="message" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="woke">
+			<description>
+			</description>
+		</signal>
+		<signal name="slept">
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

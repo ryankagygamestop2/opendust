@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OSApp" inherits="Control" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		Base class for OpenDust OS apps.
+	</brief_description>
+	<description>
+		An app is a [Control] scene. Extend this class (in GDScript or C++) and override [method _setup] to receive the [OSAppContext]. Register the scene with [method OSKernel.register_app]. The built-in apps ([code]os.home[/code], [code]os.files[/code], [code]os.notes[/code], [code]os.messages[/code]) are OSApps implemented in C++.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="_setup" qualifiers="virtual">
+			<return type="void" />
+			<param index="0" name="context" type="OSAppContext" />
+			<description>
+				Called once when the app is opened.
+			</description>
+		</method>
+		<method name="setup">
+			<return type="void" />
+			<param index="0" name="context" type="OSAppContext" />
+			<description>
+			</description>
+		</method>
+		<method name="get_context" qualifiers="const">
+			<return type="OSAppContext" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>

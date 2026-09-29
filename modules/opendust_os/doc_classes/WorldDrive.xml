@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="WorldDrive" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		The filesystem namespace shared by every device in a world, backed by a real directory.
+	</brief_description>
+	<description>
+		Paths are drive-relative ([code]notes/a.md[/code]) or use the [code]drive://&lt;world&gt;/notes/a.md[/code] form. Absolute paths, drive letters, schemes and any path that would resolve above [member root] are refused by every method: the drive cannot be made to reach outside its root. Writes through this API emit [signal changed].
+		The drive is plain files on purpose. Slates, agents and apps all see the same bytes.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="strip_scheme" qualifiers="static">
+			<return type="String" />
+			<param index="0" name="path" type="String" />
+			<description>
+				Removes a [code]drive://&lt;world&gt;/[/code] prefix and normalizes separators.
+			</description>
+		</method>
+		<method name="is_valid_path" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="path" type="String" />
+			<description>
+				[code]true[/code] if the path resolves inside the root (whether or not it exists).
+			</description>
+		</method>
+		<method name="to_absolute" qualifiers="const">
+			<return type="String" />
+			<param index="0" name="path" type="String" />
+			<description>
+				The absolute filesystem path, or an empty string if the path is refused.
+			</description>
+		</method>
+		<method name="exists" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="is_dir" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="list" qualifiers="const">
+			<return type="Array" />
+			<param index="0" name="dir" type="String" />
+			<description>
+				Returns [code][{name, path, is_dir, size}][/code], directories first.
+			</description>
+		</method>
+		<method name="list_names" qualifiers="const">
+			<return type="PackedStringArray" />
+			<param index="0" name="dir" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="read_text" qualifiers="const">
+			<return type="String" />
+			<param index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="read_bytes" qualifiers="const">
+			<return type="PackedByteArray" />
+			<param index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="write_text">
+			<return type="int" enum="Error" />
+			<param index="0" name="path" type="String" />
+			<param index="1" name="text" type="String" />
+			<description>
+				Creates parent directories as needed.
+			</description>
+		</method>
+		<method name="write_bytes">
+			<return type="int" enum="Error" />
+			<param index="0" name="path" type="String" />
+			<param index="1" name="bytes" type="PackedByteArray" />
+			<description>
+			</description>
+		</method>
+		<method name="make_dir">
+			<return type="int" enum="Error" />
+			<param index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="remove">
+			<return type="int" enum="Error" />
+			<param index="0" name="path" type="String" />
+			<description>
+				Removes a file or an empty directory. The root itself cannot be removed.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="root" type="String" setter="set_root" getter="get_root" default="&quot;&quot;">
+			Absolute path of the directory backing this drive.
+		</member>
+	</members>
+	<signals>
+		<signal name="changed">
+			<param index="0" name="path" type="String" />
+			<description>
+				Emitted after a successful write, make_dir or remove through this API.
+			</description>
+		</signal>
+	</signals>
+</class>

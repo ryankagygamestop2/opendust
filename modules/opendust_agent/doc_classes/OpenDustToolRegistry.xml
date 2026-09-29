@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OpenDustToolRegistry" inherits="Object" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		The single source of truth for what an agent can do in OpenDust.
+	</brief_description>
+	<description>
+		Engine modules and project addons register tools here. [OpenDustAgentServer] lists them to connected agents and dispatches JSON-RPC calls to their handlers. A tool is a name (namespaced like [code]node.create[/code]), a description, a JSON Schema for its parameters, a handler [Callable] and a set of flags.
+		The handler receives two [Dictionary] arguments, [code]params[/code] and [code]context[/code] ([code]session_id[/code], [code]agent_name[/code], [code]agent_id[/code], [code]mode[/code]), and returns a [Dictionary]. To report an error return a dictionary with a [code]$error[/code] key holding [code]{code, message}[/code]; see [method make_error].
+		Registering or unregistering a tool bumps [method get_capabilities_version] and emits [signal capabilities_changed], which the server forwards to agents as [code]event.capabilities_changed[/code].
+		See [code]docs/opendust/01-agent-bridge-protocol.md[/code].
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="call_tool">
+			<return type="Dictionary" />
+			<param index="0" name="name" type="String" />
+			<param index="1" name="params" type="Dictionary" />
+			<param index="2" name="context" type="Dictionary" default="{}" />
+			<description>
+				Invokes a tool directly. Returns [code]{result: ...}[/code] on success or [code]{error: {code, message}}[/code] on failure.
+			</description>
+		</method>
+		<method name="find_room_for_node">
+			<return type="Node" />
+			<param index="0" name="node" type="Node" />
+			<description>
+				Returns the nearest registered room that is [param node] or one of its ancestors, or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_capabilities_version" qualifiers="const">
+			<return type="int" />
+			<description>
+				Increments every time the tool set changes.
+			</description>
+		</method>
+		<method name="get_room_node" qualifiers="const">
+			<return type="Node" />
+			<param index="0" name="room_id" type="String" />
+			<description>
+				The node registered under [param room_id], or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_rooms" qualifiers="const">
+			<return type="Array" />
+			<description>
+				Every registered room as [code]{room_id, node_path, room_dir, display_name}[/code].
+			</description>
+		</method>
+		<method name="get_tool_flags" qualifiers="const">
+			<return type="int" />
+			<param index="0" name="name" type="String" />
+			<description>
+				The [enum ToolFlags] bitmask of a tool, or [code]0[/code] if unknown.
+			</description>
+		</method>
+		<method name="has_tool" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="name" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="list_tools" qualifiers="const">
+			<return type="Array" />
+			<param index="0" name="mode_mask" type="int" default="0" />
+			<description>
+				Tool specs as [code]{name, description, inputSchema, flags}[/code]. Pass [constant TOOL_EDITOR] or [constant TOOL_RUNTIME] to filter; [code]0[/code] lists all.
+			</description>
+		</method>
+		<method name="make_error" qualifiers="static">
+			<return type="Dictionary" />
+			<param index="0" name="code" type="int" />
+			<param index="1" name="message" type="String" />
+			<description>
+				Builds the [code]{"$error": {code, message}}[/code] dictionary a handler returns to fail a call.
+			</description>
+		</method>
+		<method name="register_room">
+			<return type="void" />
+			<param index="0" name="room_id" type="String" />
+			<param index="1" name="node" type="Node" />
+			<description>
+				Registers a room node. Rooms are expected to expose [code]room_dir[/code] and [code]display_name[/code] properties.
+			</description>
+		</method>
+		<method name="register_tool">
+			<return type="void" />
+			<param index="0" name="name" type="String" />
+			<param index="1" name="description" type="String" />
+			<param index="2" name="input_schema" type="Dictionary" />
+			<param index="3" name="handler" type="Callable" />
+			<param index="4" name="flags" type="int" />
+			<description>
+				Registers (or replaces) a tool. [param flags] must include [constant TOOL_EDITOR] and/or [constant TOOL_RUNTIME].
+			</description>
+		</method>
+		<method name="unregister_room">
+			<return type="void" />
+			<param index="0" name="room_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="unregister_tool">
+			<return type="void" />
+			<param index="0" name="name" type="String" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<signals>
+		<signal name="capabilities_changed">
+			<param index="0" name="version" type="int" />
+			<description>
+				Emitted when a tool is registered or removed.
+			</description>
+		</signal>
+	</signals>
+	<constants>
+		<constant name="TOOL_EDITOR" value="1" enum="ToolFlags">
+			Available while the editor is running.
+		</constant>
+		<constant name="TOOL_RUNTIME" value="2" enum="ToolFlags">
+			Available while a game is running.
+		</constant>
+		<constant name="TOOL_MUTATES" value="4" enum="ToolFlags">
+			Changes project or scene state; subject to the [code]opendust/agent/policy[/code] setting.
+		</constant>
+		<constant name="TOOL_SLOW" value="8" enum="ToolFlags">
+			May take noticeable time (captures, rescans).
+		</constant>
+	</constants>
+</class>

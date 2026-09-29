@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="Device2D" inherits="Control" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		An OpenDust OS device drawn directly in a 2D world or HUD.
+	</brief_description>
+	<description>
+		The same shell and kernel registration as [Device], without the 3D screen quad. The [OSShell] fills this control. Useful for 2D worlds and for showing a player's own device as a HUD overlay.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_session" qualifiers="const">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="get_room_id" qualifiers="const">
+			<return type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="open_app">
+			<return type="void" />
+			<param index="0" name="app_id" type="String" />
+			<param index="1" name="args" type="Dictionary" default="{}" />
+			<description>
+			</description>
+		</method>
+		<method name="is_awake" qualifiers="const">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="wake">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="sleep">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="receive_message">
+			<return type="void" />
+			<param index="0" name="message" type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="get_shell" qualifiers="const">
+			<return type="OSShell" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="device_id" type="String" setter="set_device_id" getter="get_device_id" default="&quot;&quot;">
+		</member>
+		<member name="boot_app" type="String" setter="set_boot_app" getter="get_boot_app" default="&quot;os.home&quot;">
+		</member>
+	</members>
+	<signals>
+		<signal name="message_received">
+			<param index="0" name="message" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

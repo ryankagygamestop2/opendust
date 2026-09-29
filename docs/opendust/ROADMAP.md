@@ -6,14 +6,23 @@ Updated 2026-09-29. Honest about what's real.
 
 - [x] Fork Godot 4.7.2-stable, `upstream` remote, `main` branch, branding in `version.py`
 - [x] Architecture and protocol docs (`docs/opendust/00…06`)
-- [ ] `modules/opendust_agent`: server, registry, editor tools, Agents dock, discovery file
-- [ ] `tools/opendust-mcp`: stdio MCP bridge with dynamic tool discovery, tests with a fake engine
-- [ ] `modules/opendust_slate`: ClaudeSession, SlatePanel, AgentSlate3D, Room, demo project
-- [ ] `modules/opendust_soul`: Soul resource + loader, AgentBody, agent.* tools, session prompt
-- [ ] `modules/opendust_os`: skeleton (OSKernel, Device, OSShell, WorldDrive) + os.home/os.files
-- [ ] First Windows editor build passes with all modules on
-- [ ] Oliver connects to the built editor over the bridge and builds a scene from Claude Code
-- [ ] GitHub: `gh auth login` on the build box, push `main`, wire the real fork remote
+- [x] `modules/opendust_agent`: server, registry, editor tools, Agents dock, discovery file
+- [x] `tools/opendust-mcp`: stdio MCP bridge with dynamic tool discovery, tests with a fake engine
+- [x] `modules/opendust_slate`: ClaudeSession, SlatePanel, AgentSlate3D, Room, demo project
+- [x] `modules/opendust_soul`: Soul resource + loader, AgentBody, agent.* tools, session prompt
+- [x] `modules/opendust_os`: skeleton (OSKernel, Device, OSShell, WorldDrive) + os.home/os.files
+- [x] First Windows editor build passes with all modules on
+- [x] Oliver connects to the built editor over the bridge and builds a scene from Claude Code (2026-09-29: headless editor, `node.create` recorded as "Oliver: Create Node3D", undo works; runtime bridge + MCP path verified; slate and UI not yet exercised in a windowed session)
+- [x] GitHub: `gh auth login` on the build box, push `main`, wire the real fork remote
+
+### Not yet verified (phase 0 leftovers)
+
+- A windowed (non-headless) editor session: Agents dock visible, `editor.capture` returning pixels
+- The slate actually spawning `claude` and streaming into the panel in the demo
+- `AgentBody` spawn + `agent.perceive` with a real body in a scene
+- OS shell rendering on the tablet's screen, apps opening
+- C++ unit tests build (`tests=yes`) and the soul parser tests pass
+- Linux/macOS builds
 
 ## Phase 1: agents live in the editor
 

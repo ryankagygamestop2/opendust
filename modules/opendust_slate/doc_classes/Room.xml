@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="Room" inherits="Node3D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		A subtree with a working directory.
+	</brief_description>
+	<description>
+		A [Room] gives a part of the world a place on disk. Slates held inside it run their Claude session in [member room_dir]; agent bodies standing in it report it as their location. At runtime the room creates its directory if needed, writes a small [code].opendust-room.json[/code] marker there, and registers itself with the OpenDust agent bridge so [code]world.rooms[/code] can list it.
+		The directory is the room's memory. There is deliberately nothing else.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="find_room_for" qualifiers="static">
+			<return type="Room" />
+			<param index="0" name="node" type="Node" />
+			<description>
+				Returns the nearest [Room] that is [param node] or one of its ancestors, or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_absolute_dir" qualifiers="const">
+			<return type="String" />
+			<description>
+				[member room_dir] resolved to an absolute filesystem path.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="display_name" type="String" setter="set_display_name" getter="get_display_name" default="&quot;&quot;">
+			Human-friendly name shown on slates. Falls back to [member room_id].
+		</member>
+		<member name="room_dir" type="String" setter="set_room_dir" getter="get_room_dir" default="&quot;&quot;">
+			Absolute path, [code]res://[/code], [code]user://[/code], or a path relative to the project. Empty means the project directory.
+		</member>
+		<member name="room_id" type="String" setter="set_room_id" getter="get_room_id" default="&quot;&quot;">
+			Stable, human-legible id. Defaults to the node name in snake_case at runtime if left empty.
+		</member>
+	</members>
+</class>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OSShell" inherits="Control" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		The OpenDust OS window manager shown on a device screen.
+	</brief_description>
+	<description>
+		A status bar (clock, transient notifications, signed-in name, world id, back button) above a content area that shows one app at a time. Built procedurally; a device works with no project assets. Apps are instantiated through the [OSKernel] app registry and receive an [OSAppContext].
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="open_app">
+			<return type="void" />
+			<param index="0" name="app_id" type="String" />
+			<param index="1" name="args" type="Dictionary" default="{}" />
+			<description>
+				Closes the current app and opens [param app_id].
+			</description>
+		</method>
+		<method name="go_home">
+			<return type="void" />
+			<description>
+				Opens [code]os.home[/code].
+			</description>
+		</method>
+		<method name="get_current_app_id" qualifiers="const">
+			<return type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_current_app" qualifiers="const">
+			<return type="Control" />
+			<description>
+			</description>
+		</method>
+		<method name="notify">
+			<return type="void" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Shows [param text] in the status bar for a few seconds.
+			</description>
+		</method>
+		<method name="refresh_status">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="get_host" qualifiers="const">
+			<return type="Node" />
+			<description>
+				The [Device] or [Device2D] this shell belongs to.
+			</description>
+		</method>
+	</methods>
+	<signals>
+		<signal name="app_opened">
+			<param index="0" name="app_id" type="String" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SlatePanel" inherits="PanelContainer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		The conversation surface drawn on a slate's screen.
+	</brief_description>
+	<description>
+		A dark, self-contained UI for a [ClaudeSession]: a streaming transcript, collapsible tool cards, an input line and a status strip showing the room and session state. [AgentSlate3D] creates one by default; you can also drop it into any 2D scene and call [method bind_session].
+		The panel never decides permissions. It shows a request and re-emits it as [signal permission_requested].
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="append_system_text">
+			<return type="void" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Adds a small, muted line to the transcript.
+			</description>
+		</method>
+		<method name="append_user_text">
+			<return type="void" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Adds a user line to the transcript without sending it.
+			</description>
+		</method>
+		<method name="bind_room">
+			<return type="void" />
+			<param index="0" name="room" type="Room" />
+			<description>
+				Shows the room's name and directory in the status strip.
+			</description>
+		</method>
+		<method name="bind_session">
+			<return type="void" />
+			<param index="0" name="session" type="ClaudeSession" />
+			<description>
+				Connects the panel to a session's signals. Passing [code]null[/code] disconnects.
+			</description>
+		</method>
+		<method name="clear_transcript">
+			<return type="void" />
+			<description>
+				Removes everything from the transcript.
+			</description>
+		</method>
+		<method name="focus_input">
+			<return type="void" />
+			<description>
+				Gives keyboard focus to the input line.
+			</description>
+		</method>
+		<method name="get_room" qualifiers="const">
+			<return type="Room" />
+			<description>
+			</description>
+		</method>
+		<method name="get_session" qualifiers="const">
+			<return type="ClaudeSession" />
+			<description>
+			</description>
+		</method>
+		<method name="submit">
+			<return type="void" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Appends [param text] as a user line and sends it to the bound session.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="normal_font_size" type="int" setter="set_normal_font_size" getter="get_normal_font_size" default="18">
+			Font size for transcript and input text.
+		</member>
+	</members>
+	<signals>
+		<signal name="permission_requested">
+			<param index="0" name="request" type="Dictionary" />
+			<description>
+				Forwarded from [signal ClaudeSession.permission_request].
+			</description>
+		</signal>
+		<signal name="stderr_line">
+			<param index="0" name="text" type="String" />
+			<description>
+				Forwarded from [signal ClaudeSession.stderr_line].
+			</description>
+		</signal>
+		<signal name="submitted">
+			<param index="0" name="text" type="String" />
+			<description>
+				The user submitted a line.
+			</description>
+		</signal>
+	</signals>
+</class>
