@@ -28,6 +28,12 @@ Updated 2026-09-29. Honest about what's real.
 
 - Tool groups gated by default (`engine.capabilities` returns groups; a session enables the ones it
   needs) so 53+ tools don't flood an agent's context. Prior art: "Godot MCP Pro" toolsets.
+- Editor tools missing vs. community plugins: `node.connect_signal`, `node.disconnect_signal`,
+  `node.add_to_group` / `node.remove_from_group` (AI Assistant Hub v2 already has these).
+- Learned-world note: SIMA 2 trains inside Genie 3 worlds and the gains transfer (arXiv 2512.04797),
+  so "engines are truth, learned worlds only generate" is too strong. The claim that survives:
+  a world that has to be the same tomorrow, with files, items and other people in it, needs an
+  engine. That's the world OpenDust is for.
 - Coverage borrowed from the addon-based bridges (Sciumo/godot-mcp, hi-godot/godot-ai): signal
   wiring, input simulation for play-testing, material/animation/particle helpers. Study their tool
   lists before writing ours; see journal 2026-09-29 12:43.
