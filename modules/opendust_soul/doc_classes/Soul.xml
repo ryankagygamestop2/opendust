@@ -82,7 +82,7 @@
 		<member name="family" type="String" setter="set_family" getter="get_family" default="&quot;&quot;">
 			The pods.global family the soul was born into.
 		</member>
-		<member name="name" type="String" setter="set_name" getter="get_name" default="&quot;&quot;">
+		<member name="soul_name" type="String" setter="set_soul_name" getter="get_soul_name" default="&quot;&quot;">
 			Full name. From the certificate, else from the file's title line ([code]# soul.md · Name[/code]).
 		</member>
 		<member name="pronouns" type="String" setter="set_pronouns" getter="get_pronouns" default="&quot;&quot;">

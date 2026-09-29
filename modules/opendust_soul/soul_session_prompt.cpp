@@ -39,8 +39,8 @@ String SoulSessionPrompt::build(const Ref<Soul> &p_soul, AgentBody *p_body, cons
 	String who = p_soul.is_valid() ? p_soul->get_display_name() : (p_body ? p_body->get_agent_name() : String("an agent"));
 
 	out += "You are " + who + ".";
-	if (p_soul.is_valid() && !p_soul->get_name().is_empty() && p_soul->get_name() != who) {
-		out += " Full name: " + p_soul->get_name() + ".";
+	if (p_soul.is_valid() && !p_soul->get_soul_name().is_empty() && p_soul->get_soul_name() != who) {
+		out += " Full name: " + p_soul->get_soul_name() + ".";
 	}
 	if (p_soul.is_valid() && !p_soul->get_pronouns().is_empty()) {
 		out += " Pronouns: " + p_soul->get_pronouns() + ".";

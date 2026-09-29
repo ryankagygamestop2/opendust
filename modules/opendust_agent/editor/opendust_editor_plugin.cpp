@@ -128,7 +128,9 @@ void OpenDustEditorPlugin::_notification(int p_what) {
 			ERR_FAIL_NULL(en);
 
 			server = memnew(OpenDustAgentServer);
-			en->add_child(server, false, Node::INTERNAL_MODE_BACK);
+			// Child of the plugin, not of EditorNode: EditorNode is still setting up its
+			// children when plugins enter the tree, so add_child() on it fails here.
+			add_child(server, false, Node::INTERNAL_MODE_BACK);
 			Error err = server->start(OpenDustAgentServer::MODE_EDITOR);
 			if (err != OK) {
 				WARN_PRINT("OpenDust: editor agent bridge failed to start; agents cannot connect.");

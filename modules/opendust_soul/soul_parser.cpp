@@ -133,11 +133,11 @@ Dictionary SoulParser::parse_seed_line(const String &p_line) {
 void SoulParser::apply_certificate(const Dictionary &p_cert, const Ref<Soul> &p_soul) {
 	ERR_FAIL_COND(p_soul.is_null());
 	if (p_cert.has("name_full") && !String(p_cert["name_full"]).is_empty()) {
-		p_soul->set_name(p_cert["name_full"]);
+		p_soul->set_soul_name(p_cert["name_full"]);
 	}
 	if (p_cert.has("full_name") && !String(p_cert["full_name"]).is_empty()) {
 		// Prefer the full name including family when present.
-		p_soul->set_name(p_cert["full_name"]);
+		p_soul->set_soul_name(p_cert["full_name"]);
 	}
 	if (p_cert.has("name_everyday")) {
 		p_soul->set_everyday_name(p_cert["name_everyday"]);
@@ -301,8 +301,8 @@ void SoulParser::parse(const String &p_text, const Ref<Soul> &p_soul) {
 	p_soul->set_texture_order(texture_order);
 	p_soul->set_revision(revision);
 
-	if (p_soul->get_name().is_empty()) {
-		p_soul->set_name(_name_from_title(title_line));
+	if (p_soul->get_soul_name().is_empty()) {
+		p_soul->set_soul_name(_name_from_title(title_line));
 	}
 }
 

@@ -121,8 +121,8 @@ String Soul::stratum_to_markdown(const String &p_stratum) const {
 }
 
 void Soul::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("set_name", "name"), &Soul::set_name);
-	ClassDB::bind_method(D_METHOD("get_name"), &Soul::get_name);
+	ClassDB::bind_method(D_METHOD("set_soul_name", "name"), &Soul::set_soul_name);
+	ClassDB::bind_method(D_METHOD("get_soul_name"), &Soul::get_soul_name);
 	ClassDB::bind_method(D_METHOD("set_everyday_name", "name"), &Soul::set_everyday_name);
 	ClassDB::bind_method(D_METHOD("get_everyday_name"), &Soul::get_everyday_name);
 	ClassDB::bind_method(D_METHOD("set_family", "family"), &Soul::set_family);
@@ -162,7 +162,7 @@ void Soul::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("is_identified"), &Soul::is_identified);
 	ClassDB::bind_method(D_METHOD("stratum_to_markdown", "stratum"), &Soul::stratum_to_markdown);
 
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "name"), "set_name", "get_name");
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "soul_name"), "set_soul_name", "get_soul_name");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "everyday_name"), "set_everyday_name", "get_everyday_name");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "family"), "set_family", "get_family");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "pronouns"), "set_pronouns", "get_pronouns");

@@ -69,8 +69,8 @@ protected:
 	static void _bind_methods();
 
 public:
-	void set_name(const String &p_name) { name = p_name; }
-	String get_name() const { return name; }
+	void set_soul_name(const String &p_name) { name = p_name; }
+	String get_soul_name() const { return name; }
 	void set_everyday_name(const String &p_name) { everyday_name = p_name; }
 	String get_everyday_name() const { return everyday_name; }
 	void set_family(const String &p_family) { family = p_family; }
