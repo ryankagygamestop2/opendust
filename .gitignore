@@ -396,3 +396,10 @@ $RECYCLE.BIN/
 *.msp
 *.lnk
 *.generated.props
+
+# OpenDust
+.opendust/
+build-*.log
+tools/opendust-mcp/.venv/
+tools/opendust-mcp/__pycache__/
+tools/opendust-mcp/.pytest_cache/

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "opendust": {
+      "command": "python",
+      "args": ["tools/opendust-mcp/opendust_mcp.py"],
+      "env": {}
+    }
+  }
+}
