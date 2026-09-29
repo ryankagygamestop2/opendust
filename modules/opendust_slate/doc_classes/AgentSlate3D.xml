@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="AgentSlate3D" inherits="Node3D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		A held terminal object running a Claude Code session in the current room.
+	</brief_description>
+	<description>
+		Put an [AgentSlate3D] under the player's camera. It renders a [SlatePanel] onto a quad through a [SubViewport]. Press the [member toggle_action] to raise it, type to talk, [code]ui_cancel[/code] to lower it. The session's working directory is the enclosing [Room]'s directory, or the project directory when there is no room.
+		With [member attach_bridge] on, the session is launched with the OpenDust runtime MCP bridge attached (if [code].opendust/mcp-runtime.json[/code] exists in the project), so the agent inside the slate can act on the world through [code]world.*[/code], [code]agent.*[/code] and [code]os.*[/code] tools.
+		Session ids are remembered per room and agent name in [code].opendust-slate.json[/code] so putting the slate down and picking it up resumes the conversation.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_cwd" qualifiers="const">
+			<return type="String" />
+			<description>
+				The directory the session runs in.
+			</description>
+		</method>
+		<method name="get_panel" qualifiers="const">
+			<return type="Control" />
+			<description>
+				The panel drawn on the screen: a [SlatePanel] unless [member panel_scene] is set.
+			</description>
+		</method>
+		<method name="get_room" qualifiers="const">
+			<return type="Room" />
+			<description>
+				The enclosing [Room], or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_session" qualifiers="const">
+			<return type="ClaudeSession" />
+			<description>
+			</description>
+		</method>
+		<method name="is_session_running" qualifiers="const">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="start_session">
+			<return type="int" enum="Error" />
+			<description>
+				Starts (or restarts) the Claude session. Called automatically on first raise when [member auto_start] is on.
+			</description>
+		</method>
+		<method name="stop_session">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="agent_name" type="String" setter="set_agent_name" getter="get_agent_name" default="&quot;slate&quot;">
+			Display name passed to Claude Code and used to key the remembered session id.
+		</member>
+		<member name="allowed_tools" type="PackedStringArray" setter="set_allowed_tools" getter="get_allowed_tools" default="PackedStringArray()">
+			Passed as [code]--allowedTools[/code]. Empty means Claude Code's defaults.
+		</member>
+		<member name="attach_bridge" type="bool" setter="set_attach_bridge" getter="get_attach_bridge" default="true">
+			Attach the OpenDust runtime MCP bridge so the agent can act on the world.
+		</member>
+		<member name="auto_start" type="bool" setter="set_auto_start" getter="get_auto_start" default="true">
+			Start the session the first time the slate is raised.
+		</member>
+		<member name="lowered_position" type="Vector3" setter="set_lowered_position" getter="get_lowered_position" default="Vector3(0.28, -0.42, -0.55)">
+			Local position when lowered, relative to the parent (usually the camera).
+		</member>
+		<member name="model" type="String" setter="set_model" getter="get_model" default="&quot;&quot;">
+			Optional model alias or name for the session.
+		</member>
+		<member name="panel_scene" type="PackedScene" setter="set_panel_scene" getter="get_panel_scene">
+			A scene whose root is a [Control] to draw instead of the built-in [SlatePanel]. If it has a [code]bind_session(session)[/code] method it will be called.
+		</member>
+		<member name="permission_mode" type="int" setter="set_permission_mode" getter="get_permission_mode" enum="AgentSlate3D.PermissionMode" default="0">
+			Claude Code permission mode for the session.
+		</member>
+		<member name="raise_time" type="float" setter="set_raise_time" getter="get_raise_time" default="0.25">
+			Seconds for the raise/lower animation.
+		</member>
+		<member name="raised" type="bool" setter="set_raised" getter="is_raised" default="false">
+			Whether the slate is up and taking keyboard input.
+		</member>
+		<member name="raised_position" type="Vector3" setter="set_raised_position" getter="get_raised_position" default="Vector3(0, -0.06, -0.36)">
+			Local position when raised.
+		</member>
+		<member name="resume_last_session" type="bool" setter="set_resume_last_session" getter="get_resume_last_session" default="true">
+			Resume the last session id remembered for this room and agent name.
+		</member>
+		<member name="screen_size_px" type="Vector2i" setter="set_screen_size_px" getter="get_screen_size_px" default="Vector2i(1024, 768)">
+			Resolution of the screen's [SubViewport].
+		</member>
+		<member name="screen_width_m" type="float" setter="set_screen_width_m" getter="get_screen_width_m" default="0.32">
+			Physical width of the screen quad; height follows the pixel aspect.
+		</member>
+		<member name="soul_path" type="String" setter="set_soul_path" getter="get_soul_path" default="&quot;&quot;">
+			Optional [code]soul.md[/code] appended to the session's system prompt.
+		</member>
+		<member name="toggle_action" type="StringName" setter="set_toggle_action" getter="get_toggle_action" default="&amp;&quot;slate_toggle&quot;">
+			Input action that raises the slate. Ignored if the action doesn't exist in the project's input map.
+		</member>
+	</members>
+	<signals>
+		<signal name="permission_requested">
+			<param index="0" name="request" type="Dictionary" />
+			<description>
+				The session asked for permission. If nothing is connected, the slate denies so the agent keeps moving.
+			</description>
+		</signal>
+		<signal name="raised_changed">
+			<param index="0" name="raised" type="bool" />
+			<description>
+			</description>
+		</signal>
+		<signal name="session_exited">
+			<param index="0" name="code" type="int" />
+			<description>
+			</description>
+		</signal>
+		<signal name="session_started">
+			<description>
+			</description>
+		</signal>
+	</signals>
+	<constants>
+		<constant name="PERMISSION_DEFAULT" value="0" enum="PermissionMode">
+		</constant>
+		<constant name="PERMISSION_ACCEPT_EDITS" value="1" enum="PermissionMode">
+		</constant>
+		<constant name="PERMISSION_PLAN" value="2" enum="PermissionMode">
+		</constant>
+		<constant name="PERMISSION_BYPASS" value="3" enum="PermissionMode">
+		</constant>
+		<constant name="PERMISSION_DONT_ASK" value="4" enum="PermissionMode">
+		</constant>
+		<constant name="PERMISSION_AUTO" value="5" enum="PermissionMode">
+		</constant>
+	</constants>
+</class>

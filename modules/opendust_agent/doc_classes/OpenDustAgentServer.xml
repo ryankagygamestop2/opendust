@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OpenDustAgentServer" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		The agent bridge: JSON-RPC 2.0 over a loopback WebSocket.
+	</brief_description>
+	<description>
+		Lets agents (Claude Code through [code]tools/opendust-mcp[/code], or any MCP/WebSocket client) drive the editor or a running game through the tools in [OpenDustToolRegistry].
+		One server runs per process: the editor starts one in [constant MODE_EDITOR]; a running game starts one in [constant MODE_RUNTIME] when [code]opendust/agent/runtime_autostart[/code] is on. On start the server writes [code]&lt;project&gt;/.opendust/bridge-&lt;mode&gt;.json[/code] (port, token, pid) and [code]mcp-&lt;mode&gt;.json[/code] (a Claude Code MCP config pointing at the bridge script). Clients must send [code]session.hello[/code] with the token before calling any tool.
+		Project settings: [code]opendust/agent/port[/code] (0 = default 6120/6121, next 16 tried if busy), [code]opendust/agent/policy[/code] ([code]open[/code], [code]no_mutations[/code], [code]allowlist[/code]; runtime defaults to [code]no_mutations[/code]), [code]opendust/agent/allowed_tools[/code], [code]opendust/agent/runtime_autostart[/code], [code]opendust/agent/mcp_bridge_script[/code].
+		Print and error output is captured and forwarded as [code]event.log[/code] notifications and via the [code]editor.log_tail[/code] tool.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="broadcast">
+			<return type="void" />
+			<param index="0" name="method" type="String" />
+			<param index="1" name="params" type="Dictionary" />
+			<description>
+				Sends a JSON-RPC notification to every authenticated session.
+			</description>
+		</method>
+		<method name="get_discovery_path" qualifiers="const">
+			<return type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_engine_version_string" qualifiers="const">
+			<return type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_log_tail" qualifiers="const">
+			<return type="Array" />
+			<param index="0" name="lines" type="int" default="100" />
+			<description>
+			</description>
+		</method>
+		<method name="get_mcp_config_path" qualifiers="const">
+			<return type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_mode" qualifiers="const">
+			<return type="int" enum="OpenDustAgentServer.Mode" />
+			<description>
+			</description>
+		</method>
+		<method name="get_port" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_session_count" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_sessions" qualifiers="const">
+			<return type="Array" />
+			<description>
+				Authenticated sessions as [code]{session_id, agent_name, agent_id, soul_ref, client, connected_at_ms, last_tool, tool_calls}[/code].
+			</description>
+		</method>
+		<method name="is_running" qualifiers="const">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="send_to">
+			<return type="void" />
+			<param index="0" name="session_id" type="String" />
+			<param index="1" name="method" type="String" />
+			<param index="2" name="params" type="Dictionary" />
+			<description>
+				Sends a notification to one session.
+			</description>
+		</method>
+		<method name="start">
+			<return type="int" enum="Error" />
+			<param index="0" name="mode" type="int" enum="OpenDustAgentServer.Mode" />
+			<description>
+			</description>
+		</method>
+		<method name="stop">
+			<return type="void" />
+			<description>
+				Closes every session, stops listening and removes the discovery file.
+			</description>
+		</method>
+	</methods>
+	<signals>
+		<signal name="session_connected">
+			<param index="0" name="session" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="session_disconnected">
+			<param index="0" name="session_id" type="String" />
+			<description>
+			</description>
+		</signal>
+		<signal name="started">
+			<param index="0" name="port" type="int" />
+			<description>
+			</description>
+		</signal>
+		<signal name="stopped">
+			<description>
+			</description>
+		</signal>
+		<signal name="tool_called">
+			<param index="0" name="session_id" type="String" />
+			<param index="1" name="tool" type="String" />
+			<param index="2" name="params" type="Dictionary" />
+			<param index="3" name="ok" type="bool" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+	<constants>
+		<constant name="MODE_EDITOR" value="0" enum="Mode">
+		</constant>
+		<constant name="MODE_RUNTIME" value="1" enum="Mode">
+		</constant>
+	</constants>
+</class>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OpenDustIdentity" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		Consumer of pods.global identity. Local session only in this phase.
+	</brief_description>
+	<description>
+		OpenDust never runs its own login or stores passwords; it consumes the pods.global single sign-on. The OIDC flow is not implemented yet ([method sign_in] returns [constant ERR_UNAVAILABLE]); every device runs with the local session [code]{family_id:"local", user_id:"local", display_name:&lt;os user&gt;, scopes:["local"]}[/code]. See [code]docs/opendust/05-identity.md[/code].
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="sign_in">
+			<return type="int" enum="Error" />
+			<description>
+			</description>
+		</method>
+		<method name="sign_out">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="is_signed_in" qualifiers="const">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="get_local_session" qualifiers="const">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="get_session" qualifiers="const">
+			<return type="Dictionary" />
+			<description>
+				The active session; the local session while signed out.
+			</description>
+		</method>
+	</methods>
+</class>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OSKernel" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		The per-world OpenDust OS kernel: world drive, app registry, sessions, message bus.
+	</brief_description>
+	<description>
+		Exactly one [OSKernel] exists per running world. It is created lazily by the first [Device] or [Device2D] that enters the tree (added under the scene tree root as [code]OpenDustOSKernel[/code]) and found with [method get_singleton].
+		The kernel owns the [WorldDrive] (a real directory, [code]user://opendust/worlds/&lt;world_id&gt;/drive[/code] by default, configurable with the [code]opendust/os/drive_root[/code] project setting), the app registry (built-in apps plus scenes registered with [method register_app]), the per-device session (a local session until pods.global SSO lands) and the message bus.
+		Messages are addressed to durable ids (a device id, a user id, an agent id or a display name), never to node paths. An undeliverable message is queued against its id and redelivered when a matching device registers.
+		See [code]docs/opendust/03-os-layer.md[/code].
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_singleton" qualifiers="static">
+			<return type="OSKernel" />
+			<description>
+				Returns the kernel of the running world, or [code]null[/code] if no device has entered the tree yet.
+			</description>
+		</method>
+		<method name="get_world_id" qualifiers="const">
+			<return type="String" />
+			<description>
+				The world id, from the [code]opendust/world_id[/code] project setting.
+			</description>
+		</method>
+		<method name="get_drive_root" qualifiers="const">
+			<return type="String" />
+			<description>
+				Absolute filesystem path of the world drive.
+			</description>
+		</method>
+		<method name="get_drive" qualifiers="const">
+			<return type="WorldDrive" />
+			<description>
+				The world drive shared by every device in this world.
+			</description>
+		</method>
+		<method name="get_identity" qualifiers="const">
+			<return type="OpenDustIdentity" />
+			<description>
+				The identity consumer. Phase 0: local session only.
+			</description>
+		</method>
+		<method name="register_app">
+			<return type="void" />
+			<param index="0" name="id" type="String" />
+			<param index="1" name="title" type="String" />
+			<param index="2" name="scene" type="PackedScene" />
+			<description>
+				Registers a scene as an app. The scene root must be a [Control]; if it extends [OSApp] (or has a [code]setup(context)[/code] method) it receives an [OSAppContext] when opened.
+			</description>
+		</method>
+		<method name="unregister_app">
+			<return type="void" />
+			<param index="0" name="id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="has_app" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="list_apps" qualifiers="const">
+			<return type="Array" />
+			<description>
+				Returns [code][{id, title, builtin}][/code]. Built-in apps are [code]os.home[/code], [code]os.files[/code], [code]os.notes[/code] and [code]os.messages[/code].
+			</description>
+		</method>
+		<method name="get_session_for" qualifiers="const">
+			<return type="Dictionary" />
+			<param index="0" name="device_id" type="String" />
+			<description>
+				The session signed in on a device: [code]{family_id, user_id, display_name, scopes, source}[/code].
+			</description>
+		</method>
+		<method name="get_devices" qualifiers="const">
+			<return type="Array" />
+			<description>
+				Returns [code][{device_id, node_path, awake, session, room_id}][/code] for every registered device.
+			</description>
+		</method>
+		<method name="get_device" qualifiers="const">
+			<return type="Node" />
+			<param index="0" name="device_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="send">
+			<return type="Dictionary" />
+			<param index="0" name="message" type="Dictionary" />
+			<description>
+				Sends [code]{from?, to, body, attachments?}[/code] on the bus. Returns [code]{id, queued, delivered}[/code]. [code]to[/code] is a durable id. Delivery failure is a state, not an error: the message is queued and redelivered later.
+			</description>
+		</method>
+		<method name="get_history" qualifiers="const">
+			<return type="Array" />
+			<param index="0" name="limit" type="int" default="100" />
+			<description>
+				The most recent messages seen by the bus (delivered or queued), oldest first.
+			</description>
+		</method>
+	</methods>
+	<signals>
+		<signal name="message_received">
+			<param index="0" name="message" type="Dictionary" />
+			<description>
+				Emitted when a message is delivered to at least one device.
+			</description>
+		</signal>
+		<signal name="drive_changed">
+			<param index="0" name="path" type="String" />
+			<description>
+				Emitted when the world drive is written through the [WorldDrive] API.
+			</description>
+		</signal>
+		<signal name="device_registered">
+			<param index="0" name="device_id" type="String" />
+			<description>
+			</description>
+		</signal>
+		<signal name="device_unregistered">
+			<param index="0" name="device_id" type="String" />
+			<description>
+			</description>
+		</signal>
+		<signal name="apps_changed">
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="ClaudeSession" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		One Claude Code child process speaking stream-json over stdin/stdout.
+	</brief_description>
+	<description>
+		[ClaudeSession] launches the [code]claude[/code] command line in print mode with structured streaming input and output, in a working directory you choose. A reader thread collects events; [method poll] must be called from the main thread (once per frame is plenty) to turn them into signals.
+		This is the engine side of the OpenDust slate (see [AgentSlate3D]) and of any other in-world or in-editor agent surface that wants a Claude Code session. It is not a terminal emulator: you receive text, tool calls and results as data and decide how to show them.
+		The [code]claude[/code] executable is resolved from the [code]claude_path[/code] option, then the project setting [code]opendust/slate/claude_path[/code], then [code]claude[/code] on the PATH.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_claude_path" qualifiers="static">
+			<return type="String" />
+			<param index="0" name="options" type="Dictionary" default="{}" />
+			<description>
+				Returns the executable that [method start] will launch for the given options.
+			</description>
+		</method>
+		<method name="get_cwd" qualifiers="const">
+			<return type="String" />
+			<description>
+				The working directory the session was started in.
+			</description>
+		</method>
+		<method name="get_exit_code" qualifiers="const">
+			<return type="int" />
+			<description>
+				The child's exit code after [signal exited], or [code]-1[/code].
+			</description>
+		</method>
+		<method name="get_pid" qualifiers="const">
+			<return type="int" />
+			<description>
+				Process id of the launcher shell, or [code]-1[/code].
+			</description>
+		</method>
+		<method name="get_session_id" qualifiers="const">
+			<return type="String" />
+			<description>
+				The Claude Code session id, available after [signal started]. Pass it back as the [code]resume[/code] option to continue the conversation later. This is an address, not an identity: it can be lost without losing who the agent is.
+			</description>
+		</method>
+		<method name="is_running" qualifiers="const">
+			<return type="bool" />
+			<description>
+				[code]true[/code] while the child process is alive.
+			</description>
+		</method>
+		<method name="poll">
+			<return type="void" />
+			<description>
+				Drains queued events and emits signals. Main thread only. [AgentSlate3D] calls this for you.
+			</description>
+		</method>
+		<method name="respond_permission">
+			<return type="void" />
+			<param index="0" name="request_id" type="String" />
+			<param index="1" name="allow" type="bool" />
+			<param index="2" name="updated_input" type="Dictionary" default="{}" />
+			<param index="3" name="deny_message" type="String" default="&quot;&quot;" />
+			<description>
+				Answers a [signal permission_request]. [param request_id] comes from the request dictionary.
+			</description>
+		</method>
+		<method name="send_raw">
+			<return type="void" />
+			<param index="0" name="message" type="Dictionary" />
+			<description>
+				Writes one JSON object as a stream-json line. For callers that know the protocol.
+			</description>
+		</method>
+		<method name="send_user_message">
+			<return type="void" />
+			<param index="0" name="text" type="String" />
+			<param index="1" name="attachments" type="Array" default="[]" />
+			<description>
+				Sends a user turn. [param attachments] are appended as extra content blocks verbatim.
+			</description>
+		</method>
+		<method name="start">
+			<return type="int" enum="Error" />
+			<param index="0" name="cwd" type="String" />
+			<param index="1" name="options" type="Dictionary" default="{}" />
+			<description>
+				Launches [code]claude[/code] in [param cwd]. Recognised option keys: [code]permission_mode[/code], [code]mcp_config[/code], [code]resume[/code], [code]model[/code], [code]name[/code], [code]append_system_prompt_file[/code], [code]system_prompt_file[/code], [code]allowed_tools[/code], [code]disallowed_tools[/code], [code]max_budget_usd[/code], [code]no_session_persistence[/code], [code]extra_args[/code], [code]claude_path[/code].
+			</description>
+		</method>
+		<method name="stop">
+			<return type="void" />
+			<description>
+				Kills the child process, joins the reader threads and emits [signal exited].
+			</description>
+		</method>
+	</methods>
+	<signals>
+		<signal name="exited">
+			<param index="0" name="code" type="int" />
+			<description>
+				The child process has ended.
+			</description>
+		</signal>
+		<signal name="message_complete">
+			<param index="0" name="message" type="Dictionary" />
+			<description>
+				A full assistant message (with its content blocks) has arrived. Text in it was already delivered through [signal text_delta].
+			</description>
+		</signal>
+		<signal name="permission_request">
+			<param index="0" name="request" type="Dictionary" />
+			<description>
+				Claude Code is asking whether a tool may run. Answer with [method respond_permission].
+			</description>
+		</signal>
+		<signal name="raw_event">
+			<param index="0" name="event" type="Dictionary" />
+			<description>
+				Every stream-json event, before interpretation. Use this for event types this class doesn't know.
+			</description>
+		</signal>
+		<signal name="result">
+			<param index="0" name="summary" type="Dictionary" />
+			<description>
+				The turn has finished. Contains cost, duration and [code]is_error[/code].
+			</description>
+		</signal>
+		<signal name="started">
+			<param index="0" name="session_id" type="String" />
+			<description>
+				The session is initialised and ready for input.
+			</description>
+		</signal>
+		<signal name="stderr_line">
+			<param index="0" name="text" type="String" />
+			<description>
+				A line from the child's stderr, or an unparseable stdout line.
+			</description>
+		</signal>
+		<signal name="text_delta">
+			<param index="0" name="text" type="String" />
+			<description>
+				A piece of assistant text. Streams as it is generated; if streaming is unavailable the whole message text arrives as one delta.
+			</description>
+		</signal>
+		<signal name="tool_result">
+			<param index="0" name="id" type="String" />
+			<param index="1" name="content" type="String" />
+			<param index="2" name="is_error" type="bool" />
+			<description>
+				The result of a tool call, matched to [signal tool_use] by [param id].
+			</description>
+		</signal>
+		<signal name="tool_use">
+			<param index="0" name="id" type="String" />
+			<param index="1" name="name" type="String" />
+			<param index="2" name="input" type="Dictionary" />
+			<description>
+				The assistant is calling a tool.
+			</description>
+		</signal>
+	</signals>
+</class>

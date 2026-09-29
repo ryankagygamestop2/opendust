@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="AgentBody" inherits="CharacterBody3D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		A persistent body for an agent: perception, motion, expression.
+	</brief_description>
+	<description>
+		[AgentBody] gives a [Soul] a place to stand. It carries a head camera ([method get_eyes]), a speech bubble, an optional avatar scene, simple navigation, and a perception query that describes what is nearby and what the body is looking at.
+		Bodies register themselves while in the tree so the agent bridge can list them ([code]agent.bodies[/code]) and a session can attach to one ([code]agent.attach[/code]). After that, every [code]agent.*[/code] tool on the bridge maps to a method here.
+		State ([method save_state]) is written to [code]user://opendust/worlds/&lt;world_id&gt;/agents/&lt;agent_id&gt;.json[/code], keyed by the durable [member agent_id], never by a node path or a session id.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="drop">
+			<return type="void" />
+			<description>
+				Put down the held item, reparenting it to the current scene at its current global transform.
+			</description>
+		</method>
+		<method name="emote">
+			<return type="void" />
+			<param index="0" name="name" type="String" />
+			<description>
+				Play an animation on the avatar's [AnimationPlayer] if it exists, and emit [signal emoted].
+			</description>
+		</method>
+		<method name="get_eyes" qualifiers="const">
+			<return type="Camera3D" />
+			<description>
+				The head camera. Not the player's camera; used for perception and for the optional vision frame.
+			</description>
+		</method>
+		<method name="get_held_item" qualifiers="const">
+			<return type="Node" />
+			<description>
+				The item currently held, or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_room_id" qualifiers="const">
+			<return type="String" />
+			<description>
+				The [code]room_id[/code] of the nearest ancestor that is a [code]Room[/code] (from the slate module) or has a [code]room_id[/code] metadata entry. Empty if none.
+			</description>
+		</method>
+		<method name="hold">
+			<return type="void" />
+			<param index="0" name="item" type="Variant" />
+			<description>
+				Pick up a [Node3D] (by path or reference), reparenting it under the body.
+			</description>
+		</method>
+		<method name="interact">
+			<return type="void" />
+			<param index="0" name="target" type="Variant" />
+			<description>
+				Call [code]_on_agent_interact(body)[/code] on the target if it has one, then emit [signal interacted].
+			</description>
+		</method>
+		<method name="is_identified" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Whether this body has a durable [member agent_id].
+			</description>
+		</method>
+		<method name="is_moving" qualifiers="const">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="look_at_target">
+			<return type="void" />
+			<param index="0" name="target" type="Variant" />
+			<description>
+				Turn (yaw only) to face a [Vector3], an [code][x, y, z][/code] array, a [NodePath], or a [Node3D].
+			</description>
+		</method>
+		<method name="move_to">
+			<return type="void" />
+			<param index="0" name="target" type="Variant" />
+			<description>
+				Walk toward a target (same forms as [method look_at_target]). Uses the internal [NavigationAgent3D] when the target is reachable on a navigation map, else a straight line. Emits [signal arrived].
+			</description>
+		</method>
+		<method name="perceive">
+			<return type="Dictionary" />
+			<param index="0" name="include_frame" type="bool" default="false" />
+			<param index="1" name="frame_size" type="Vector2i" default="Vector2i(256, 160)" />
+			<description>
+				Returns [code]{agent_name, agent_id, room, position, facing, nearby, looking_at?, held?, frame_png_base64?}[/code]. [code]nearby[/code] lists [Node3D]s within [member perception_radius] with [code]path[/code], [code]type[/code], [code]name[/code], [code]distance[/code] and [code]in_view[/code]. With [param include_frame], the first call turns vision on and reports [code]frame_pending[/code]; later calls include a PNG from the eyes.
+			</description>
+		</method>
+		<method name="restore_state">
+			<return type="int" enum="Error" />
+			<description>
+				Load transform and held item from the world's agent state file.
+			</description>
+		</method>
+		<method name="save_state">
+			<return type="int" enum="Error" />
+			<description>
+				Write transform, room and held item to the world's agent state file.
+			</description>
+		</method>
+		<method name="say">
+			<return type="void" />
+			<param index="0" name="text" type="String" />
+			<param index="1" name="seconds" type="float" default="6.0" />
+			<description>
+				Show [param text] above the body for [param seconds] and emit [signal said].
+			</description>
+		</method>
+		<method name="stop">
+			<return type="void" />
+			<description>
+				Stop walking.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="agent_id" type="String" setter="set_agent_id" getter="get_agent_id" default="&quot;&quot;">
+			Durable id. Falls back to the soul's id. Empty means pending.
+		</member>
+		<member name="agent_name" type="String" setter="set_agent_name" getter="get_agent_name" default="&quot;&quot;">
+			Display name. Falls back to the soul's display name, then the node name.
+		</member>
+		<member name="arrive_distance" type="float" setter="set_arrive_distance" getter="get_arrive_distance" default="0.5">
+		</member>
+		<member name="avatar_scene" type="PackedScene" setter="set_avatar_scene" getter="get_avatar_scene">
+			Scene to instantiate as the visible avatar. When empty a plain placeholder is built for the resolved rig.
+		</member>
+		<member name="move_speed" type="float" setter="set_move_speed" getter="get_move_speed" default="3.0">
+		</member>
+		<member name="perception_radius" type="float" setter="set_perception_radius" getter="get_perception_radius" default="12.0">
+		</member>
+		<member name="rig" type="int" setter="set_rig" getter="get_rig" enum="AgentBody.Rig" default="0">
+			Structural rig. [constant RIG_AUTO] reads the soul's [code]avatar_rig[/code].
+		</member>
+		<member name="soul" type="Soul" setter="set_soul" getter="get_soul">
+		</member>
+		<member name="turn_speed" type="float" setter="set_turn_speed" getter="get_turn_speed" default="6.0">
+		</member>
+		<member name="use_navigation" type="bool" setter="set_use_navigation" getter="get_use_navigation" default="true">
+		</member>
+		<member name="vision_enabled" type="bool" setter="set_vision_enabled" getter="is_vision_enabled" default="false">
+			Keeps a small [SubViewport] rendering from the eyes every frame so [method perceive] can return an image. Costs a render; leave off unless an agent is looking.
+		</member>
+		<member name="vision_size" type="Vector2i" setter="set_vision_size" getter="get_vision_size" default="Vector2i(256, 160)">
+		</member>
+	</members>
+	<signals>
+		<signal name="arrived">
+			<description>
+			</description>
+		</signal>
+		<signal name="dropped">
+			<description>
+			</description>
+		</signal>
+		<signal name="emoted">
+			<param index="0" name="name" type="String" />
+			<description>
+			</description>
+		</signal>
+		<signal name="held">
+			<param index="0" name="item" type="NodePath" />
+			<description>
+			</description>
+		</signal>
+		<signal name="interacted">
+			<param index="0" name="target" type="NodePath" />
+			<description>
+			</description>
+		</signal>
+		<signal name="perception">
+			<param index="0" name="data" type="Dictionary" />
+			<description>
+				Emitted with the result of every [method perceive] call.
+			</description>
+		</signal>
+		<signal name="said">
+			<param index="0" name="text" type="String" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+	<constants>
+		<constant name="RIG_AUTO" value="0" enum="Rig">
+		</constant>
+		<constant name="RIG_NEUTRAL" value="1" enum="Rig">
+		</constant>
+		<constant name="RIG_MALE" value="2" enum="Rig">
+		</constant>
+		<constant name="RIG_FEMALE" value="3" enum="Rig">
+		</constant>
+	</constants>
+</class>

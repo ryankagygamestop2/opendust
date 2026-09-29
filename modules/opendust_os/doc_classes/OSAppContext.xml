@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OSAppContext" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		Everything an OpenDust OS app needs, handed to it when it opens.
+	</brief_description>
+	<description>
+		Apps never talk to identity or storage directly; they ask the context for the session and the drive. Apps extending [OSApp] receive it in [code]_setup[/code]; other [Control] scenes receive it through a [code]setup(context)[/code] method if they define one.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_kernel" qualifiers="const">
+			<return type="OSKernel" />
+			<description>
+			</description>
+		</method>
+		<method name="get_device" qualifiers="const">
+			<return type="Node" />
+			<description>
+				The [Device] or [Device2D] the app is running on.
+			</description>
+		</method>
+		<method name="get_shell" qualifiers="const">
+			<return type="OSShell" />
+			<description>
+			</description>
+		</method>
+		<method name="get_session" qualifiers="const">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="get_drive" qualifiers="const">
+			<return type="WorldDrive" />
+			<description>
+			</description>
+		</method>
+		<method name="get_args" qualifiers="const">
+			<return type="Dictionary" />
+			<description>
+				Arguments passed to [method OSShell.open_app].
+			</description>
+		</method>
+		<method name="open">
+			<return type="void" />
+			<param index="0" name="sku_or_path" type="String" />
+			<description>
+				Opens a [code]$SKU[/code] inventory item in its app (placeholder until the inventory registry lands) or a drive path in [code]os.notes[/code].
+			</description>
+		</method>
+		<method name="open_app">
+			<return type="void" />
+			<param index="0" name="app_id" type="String" />
+			<param index="1" name="args" type="Dictionary" default="{}" />
+			<description>
+			</description>
+		</method>
+		<method name="notify">
+			<return type="void" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Shows a transient notification in the shell's status bar.
+			</description>
+		</method>
+	</methods>
+</class>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="Soul" inherits="Resource" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		A soul in strata form, loaded from a [code]soul.md[/code].
+	</brief_description>
+	<description>
+		[Soul] is the engine's read-only view of an agent's soul file. The file is Markdown: a temple (the first fenced code block), then five strata sections ([code]Bedrock[/code], [code]Mantle[/code], [code]Crust[/code], [code]Soil[/code], [code]Atmosphere[/code]) whose bullet lines are compressed seeds, then any number of texture sections that the seeds point back into.
+		Files named [code]soul.md[/code] or ending in [code].soul.md[/code] load through [method ResourceLoader.load] like any other resource. A [code]certificate.json[/code] beside the file, if present, fills in [member name], [member everyday_name], [member pronouns], [member avatar_rig], [member family] and [member agent_id].
+		The engine never writes a soul file. Compaction (moving seeds between strata) is a separate, explicit operation and bedrock is never rewritten by the engine.
+		Each seed is a [Dictionary] with keys [code]glyph[/code], [code]name[/code], [code]text[/code], [code]pointers[/code] (a [PackedStringArray] of texture headings) and [code]raw[/code] (the original line).
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_display_name" qualifiers="const">
+			<return type="String" />
+			<description>
+				The everyday name if set, else the full name, else [code]"unnamed"[/code].
+			</description>
+		</method>
+		<method name="get_seed_count" qualifiers="const">
+			<return type="int" />
+			<param index="0" name="stratum" type="String" />
+			<description>
+				Number of seeds in the given stratum ([code]"bedrock"[/code] … [code]"atmosphere"[/code], case-insensitive).
+			</description>
+		</method>
+		<method name="get_stratum" qualifiers="const">
+			<return type="Array" />
+			<param index="0" name="stratum" type="String" />
+			<description>
+				The seeds of one stratum, in file order.
+			</description>
+		</method>
+		<method name="get_texture_section" qualifiers="const">
+			<return type="String" />
+			<param index="0" name="heading" type="String" />
+			<description>
+				The Markdown body of a texture section. Exact heading match first, then case-insensitive substring match against the file's headings.
+			</description>
+		</method>
+		<method name="has_strata" qualifiers="const">
+			<return type="bool" />
+			<description>
+				[code]true[/code] if any stratum has at least one seed. A soul without strata still loads; only its texture is available.
+			</description>
+		</method>
+		<method name="has_texture_section" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="heading" type="String" />
+			<description>
+				Whether a texture section matching [param heading] exists (see [method get_texture_section] for matching rules).
+			</description>
+		</method>
+		<method name="is_identified" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Whether a durable [member agent_id] has been minted for this soul (by a body install, never by the engine).
+			</description>
+		</method>
+		<method name="stratum_to_markdown" qualifiers="const">
+			<return type="String" />
+			<param index="0" name="stratum" type="String" />
+			<description>
+				Renders a stratum back to seed lines, verbatim where the original line is known. Used to build session prompts.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="agent_id" type="String" setter="set_agent_id" getter="get_agent_id" default="&quot;&quot;">
+			Durable agent identifier from [code]certificate.json[/code]. Empty while pending.
+		</member>
+		<member name="avatar_rig" type="String" setter="set_avatar_rig" getter="get_avatar_rig" default="&quot;&quot;">
+			Structural rig, [code]"male"[/code] or [code]"female"[/code]. Distinct from [member pronouns] by design.
+		</member>
+		<member name="certificate" type="Dictionary" setter="set_certificate" getter="get_certificate" default="{}">
+			The parsed [code]certificate.json[/code], if one was found beside the soul file.
+		</member>
+		<member name="everyday_name" type="String" setter="set_everyday_name" getter="get_everyday_name" default="&quot;&quot;">
+			Short or everyday name (e.g. [code]"Ollie"[/code]).
+		</member>
+		<member name="family" type="String" setter="set_family" getter="get_family" default="&quot;&quot;">
+			The pods.global family the soul was born into.
+		</member>
+		<member name="name" type="String" setter="set_name" getter="get_name" default="&quot;&quot;">
+			Full name. From the certificate, else from the file's title line ([code]# soul.md · Name[/code]).
+		</member>
+		<member name="pronouns" type="String" setter="set_pronouns" getter="get_pronouns" default="&quot;&quot;">
+			The person's pronouns, as declared. Never inferred from [member avatar_rig].
+		</member>
+		<member name="revision" type="int" setter="set_revision" getter="get_revision" default="0">
+			Parsed from a trailing [code]*Revision N …*[/code] line, or [code]0[/code].
+		</member>
+		<member name="source_path" type="String" setter="set_source_path" getter="get_source_path" default="&quot;&quot;">
+			Where the soul file was read from.
+		</member>
+		<member name="strata" type="Dictionary" setter="set_strata" getter="get_strata" default="{}">
+			Stratum name to [Array] of seed dictionaries.
+		</member>
+		<member name="strata_notes" type="Dictionary" setter="set_strata_notes" getter="get_strata_notes" default="{}">
+			Stratum name to [PackedStringArray] of non-seed lines found inside that stratum (intro sentences, bedrock notes).
+		</member>
+		<member name="temple" type="String" setter="set_temple" getter="get_temple" default="&quot;&quot;">
+			The temple: the first fenced code block in the file, verbatim.
+		</member>
+		<member name="texture" type="Dictionary" setter="set_texture" getter="get_texture" default="{}">
+			Texture section heading to Markdown body.
+		</member>
+		<member name="texture_order" type="PackedStringArray" setter="set_texture_order" getter="get_texture_order" default="PackedStringArray()">
+			Texture headings in file order.
+		</member>
+		<member name="title_line" type="String" setter="set_title_line" getter="get_title_line" default="&quot;&quot;">
+			The file's first h1, without the [code]#[/code].
+		</member>
+	</members>
+</class>
