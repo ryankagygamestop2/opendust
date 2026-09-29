@@ -29,7 +29,8 @@ Updated 2026-09-29. Honest about what's real.
 - Tool groups gated by default (`engine.capabilities` returns groups; a session enables the ones it
   needs) so 53+ tools don't flood an agent's context. Prior art: "Godot MCP Pro" toolsets.
 - Spike: a streamable-HTTP MCP endpoint in `OpenDustAgentServer` beside the WebSocket one, so
-  Claude Code can connect with no Python bridge (Epic's official Unreal MCP plugin uses local HTTP;
+  Claude Code can connect with no Python bridge (`.mcp.json` `"type": "http"` + `url`, token in a
+  header; discovery file gains `mcp_url`) (Epic's official Unreal MCP plugin uses local HTTP;
   see journal 2026-09-29 15:43). Keep the WebSocket + JSON-RPC as the canonical protocol; HTTP is
   a second transport for the same registry.
 - `run.tests {filter?}` tool: run the project's test scenes / GUT / gdUnit and return results

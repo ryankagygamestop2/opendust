@@ -100,6 +100,21 @@ A minimal system prompt built by `SoulSessionPrompt.build(soul, body)`:
 Everything else the agent learns by perceiving. This is on purpose: the file is the memory, the
 world is the context, and the prompt is short.
 
+## Memory, and why it isn't a vector store
+
+Shipping "memory-first" NPC systems (Wanderfolk, NVIDIA ACE and similar, 2026) give each character an
+episodic vector memory and a reputation model, opaque to the player and to the character. OpenDust
+deliberately does not. An agent's memory here is:
+
+1. its strata-form `soul.md`, human-readable, revised only by the agent under the file's own rules;
+2. its room directory, ordinary files, append-only where it matters, replicated off-box;
+3. the world drive, shared with every device and body in that world.
+
+Anyone in the household can open any of it in a text editor. A vector index may be *built from*
+these files as a cache for retrieval, but it is never the source of truth and is never the only copy.
+This follows `pods-platform/lifestream-preservation.md` (append-only master, replicated, read on a
+schedule) and the platform rule that durable things are addressed by durable, legible handles.
+
 ## Avatar rig
 
 `avatar_rig` is structural (male/female mesh and skeleton profile) and is distinct from pronouns,
