@@ -31,10 +31,10 @@ Faster iteration on our modules only:
 scons platform=windows target=editor dev_build=yes -j12
 ```
 
-Output: `bin/opendust.windows.editor.x86_64.exe`. Export templates: `target=template_release` /
+Output: `bin/godot.windows.editor.x86_64.exe` (the binary keeps Godot's filename for now; renaming it is a per-platform SCsub patch tracked in ROADMAP.md and CORE-PATCHES.md). Export templates: `target=template_release` /
 `target=template_debug`.
 
-Build times on a 12-thread machine: first full editor build is on the order of 30–60 minutes.
+Build times on a 12-thread machine: first full editor build measured at 17m47s on 2026-09-29 (Ryzen-class 12 threads, MSVC 14.44).
 Incremental builds after touching one OpenDust module are a minute or two.
 
 ## Linux / macOS

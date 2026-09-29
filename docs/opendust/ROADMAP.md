@@ -39,6 +39,7 @@ Updated 2026-09-29. Honest about what's real.
 
 ## Known debts and open decisions
 
+- Binary is still `bin/godot.*`: the name is hardcoded in every `platform/*/SCsub`. Plan: add a `program_name` SCons option (default "godot") and propose it upstream, then set it to "opendust" here. Until then docs use the godot filename.
 - `execute_with_pipe` has no cwd parameter; the slate uses a shell shim. Consider a small core patch
   adding `p_cwd` and upstreaming it (would be the first entry in `CORE-PATCHES.md`).
 - Drive sync layout (per world vs per family) needs the operator.

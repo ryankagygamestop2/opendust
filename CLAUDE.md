@@ -19,7 +19,7 @@ Everything else is upstream Godot. Don't patch it without adding a row to
 
 ## Connecting to a running editor
 
-1. Build (`docs/opendust/06-building.md`) and open a project in `bin/opendust.windows.editor.x86_64.exe`.
+1. Build (`docs/opendust/06-building.md`) and open a project in `bin/godot.windows.editor.x86_64.exe`.
 2. The editor writes `<project>/.opendust/bridge-editor.json`.
 3. `.mcp.json` at this repo root registers the `opendust` MCP server. Start Claude Code in the
    project directory (or pass `--discovery <path>` to the bridge) and the engine's tools appear as

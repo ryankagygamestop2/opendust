@@ -37,7 +37,7 @@ pip install scons
 scons platform=windows target=editor dev_build=no -j12
 ```
 
-The binary lands in `bin/opendust.windows.editor.x86_64.exe`.
+The binary lands in `bin/godot.windows.editor.x86_64.exe`.
 
 ## Working here as an agent
 
