@@ -34,8 +34,10 @@ Updated 2026-09-29. Honest about what's real.
 - Evaluate the editor agent on GameDevBench (arXiv 2602.11103) once a windowed session works.
 - Two seams for pixel-in/action-out agents (NitroGen, SIMA 2, Lumine all play through the human
   interface): (1) `world.capture` streaming at a fixed rate with an async readback path instead of
-  a per-call synchronous `get_image()`; (2) `world.input {action|key|mouse}` to inject
-  `InputEvent`s, policy-gated, so an agent can press keys the way a player does. See journal
+  a per-call synchronous `get_image()`; (2) `world.input {block:[{t_ms, action|key|mouse, ...}]}` to inject a short timed
+  sequence of `InputEvent`s and return a capture at the end, policy-gated. Block-cycle control
+  (GameWAM, arXiv 2608.26200): the agent sends an action block, the engine applies it over N
+  frames, the agent replans from the new frame. One event at a time is the wrong granularity. See journal
   2026-09-29 13:13.
 - godot-proposals #12409 turned out to be a title with no body, closed unread (May 2025). Upstream
   has never been asked properly. If the tool registry is ever worth upstreaming, write the proposal
