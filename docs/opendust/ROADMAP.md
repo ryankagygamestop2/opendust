@@ -28,6 +28,12 @@ Updated 2026-09-29. Honest about what's real.
 
 - Tool groups gated by default (`engine.capabilities` returns groups; a session enables the ones it
   needs) so 53+ tools don't flood an agent's context. Prior art: "Godot MCP Pro" toolsets.
+- Spike: a streamable-HTTP MCP endpoint in `OpenDustAgentServer` beside the WebSocket one, so
+  Claude Code can connect with no Python bridge (Epic's official Unreal MCP plugin uses local HTTP;
+  see journal 2026-09-29 15:43). Keep the WebSocket + JSON-RPC as the canonical protocol; HTTP is
+  a second transport for the same registry.
+- `run.tests {filter?}` tool: run the project's test scenes / GUT / gdUnit and return results
+  (Unreal MCP exposes automation tests; we should too).
 - Editor tools missing vs. community plugins: `node.connect_signal`, `node.disconnect_signal`,
   `node.add_to_group` / `node.remove_from_group` (AI Assistant Hub v2 already has these).
 - Learned-world note: SIMA 2 trains inside Genie 3 worlds and the gains transfer (arXiv 2512.04797),
