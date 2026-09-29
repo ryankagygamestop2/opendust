@@ -37,8 +37,11 @@ Updated 2026-09-29. Honest about what's real.
   a per-call synchronous `get_image()`; (2) `world.input {action|key|mouse}` to inject
   `InputEvent`s, policy-gated, so an agent can press keys the way a player does. See journal
   2026-09-29 13:13.
-- Read godot-proposals #12409 (integrated AI assistant) for the objections upstream raised; the
-  fork should answer them, not ignore them.
+- godot-proposals #12409 turned out to be a title with no body, closed unread (May 2025). Upstream
+  has never been asked properly. If the tool registry is ever worth upstreaming, write the proposal
+  with `01-agent-bridge-protocol.md` attached.
+- 4.7.2 vendors Jolt 5.5.0; Jolt 5.6 (Jul 2026) adds a faster friction model and determinism fixes.
+  Track whether Godot 4.8 bumps it; determinism matters for replaying agent actions.
 
 - Agents dock: conversation panel per connected agent; spawn-from-soul
 - Agentic editor layout
