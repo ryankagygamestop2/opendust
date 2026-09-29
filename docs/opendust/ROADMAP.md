@@ -26,6 +26,13 @@ Updated 2026-09-29. Honest about what's real.
 
 ## Phase 1: agents live in the editor
 
+- Tool groups gated by default (`engine.capabilities` returns groups; a session enables the ones it
+  needs) so 53+ tools don't flood an agent's context. Prior art: "Godot MCP Pro" toolsets.
+- Coverage borrowed from the addon-based bridges (Sciumo/godot-mcp, hi-godot/godot-ai): signal
+  wiring, input simulation for play-testing, material/animation/particle helpers. Study their tool
+  lists before writing ours; see journal 2026-09-29 12:43.
+- Evaluate the editor agent on GameDevBench (arXiv 2602.11103) once a windowed session works.
+
 - Agents dock: conversation panel per connected agent; spawn-from-soul
 - Agentic editor layout
 - `editor.command` covers the command palette fully
