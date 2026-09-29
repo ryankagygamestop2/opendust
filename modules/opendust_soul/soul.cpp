@@ -30,6 +30,7 @@
 /**************************************************************************/
 
 #include "soul.h"
+#include "core/object/class_db.h"
 
 const char *Soul::STRATA[5] = { "bedrock", "mantle", "crust", "soil", "atmosphere" };
 

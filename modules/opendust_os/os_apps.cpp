@@ -9,6 +9,8 @@
 /**************************************************************************/
 
 #include "os_apps.h"
+#include "core/object/class_db.h"
+#include "core/object/callable_mp.h"
 
 #include "os_kernel.h"
 

@@ -38,6 +38,7 @@
 #include "scene/resources/material.h"
 #include "scene/resources/packed_scene.h"
 
+class Control;
 class MeshInstance3D;
 class Room;
 class SlatePanel;

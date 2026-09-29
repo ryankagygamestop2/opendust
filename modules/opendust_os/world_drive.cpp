@@ -9,6 +9,7 @@
 /**************************************************************************/
 
 #include "world_drive.h"
+#include "core/object/class_db.h"
 
 #include "core/io/dir_access.h"
 #include "core/io/file_access.h"

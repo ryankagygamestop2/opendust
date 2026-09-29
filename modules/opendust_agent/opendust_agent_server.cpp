@@ -30,6 +30,8 @@
 /**************************************************************************/
 
 #include "opendust_agent_server.h"
+#include "core/object/class_db.h"
+#include "core/object/callable_mp.h"
 
 #include "opendust_json.h"
 #include "opendust_tool_registry.h"

@@ -30,6 +30,7 @@
 /**************************************************************************/
 
 #include "opendust_editor_plugin.h"
+#include "core/object/callable_mp.h"
 
 #include "opendust_agents_dock.h"
 #include "opendust_editor_tools.h"
@@ -37,6 +38,7 @@
 #include "../opendust_agent_server.h"
 #include "../opendust_node_utils.h"
 
+#include "core/input/shortcut.h"
 #include "editor/editor_data.h"
 #include "editor/editor_interface.h"
 #include "editor/editor_node.h"

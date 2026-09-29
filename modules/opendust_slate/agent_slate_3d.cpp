@@ -30,6 +30,8 @@
 /**************************************************************************/
 
 #include "agent_slate_3d.h"
+#include "core/object/class_db.h"
+#include "core/object/callable_mp.h"
 
 #include "room.h"
 #include "slate_panel.h"

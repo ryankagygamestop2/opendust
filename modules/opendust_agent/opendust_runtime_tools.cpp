@@ -30,6 +30,7 @@
 /**************************************************************************/
 
 #include "opendust_runtime_tools.h"
+#include "core/object/callable_mp.h"
 
 #include "opendust_json.h"
 #include "opendust_node_utils.h"

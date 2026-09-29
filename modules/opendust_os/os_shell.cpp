@@ -9,6 +9,8 @@
 /**************************************************************************/
 
 #include "os_shell.h"
+#include "core/object/class_db.h"
+#include "core/object/callable_mp.h"
 
 #include "os_apps.h"
 #include "os_kernel.h"
@@ -36,7 +38,7 @@ OSShell::OSShell() {
 	Ref<StyleBoxFlat> bar;
 	bar.instantiate();
 	bar->set_bg_color(Color(0.14, 0.16, 0.19));
-	status_panel->add_theme_stylebox_override(SNAME("panel"), bar);
+	status_panel->add_theme_style_override(SNAME("panel"), bar);
 	vbox->add_child(status_panel);
 
 	status_bar = memnew(HBoxContainer);
@@ -66,7 +68,7 @@ OSShell::OSShell() {
 
 	content = memnew(PanelContainer);
 	content->set_v_size_flags(Control::SIZE_EXPAND_FILL);
-	content->add_theme_stylebox_override(SNAME("panel"), bg);
+	content->add_theme_style_override(SNAME("panel"), bg);
 	vbox->add_child(content);
 
 	clock_timer = memnew(Timer);

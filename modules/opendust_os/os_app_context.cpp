@@ -9,6 +9,7 @@
 /**************************************************************************/
 
 #include "os_app_context.h"
+#include "core/object/class_db.h"
 
 #include "os_kernel.h"
 #include "os_shell.h"

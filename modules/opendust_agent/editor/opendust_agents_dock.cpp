@@ -30,6 +30,7 @@
 /**************************************************************************/
 
 #include "opendust_agents_dock.h"
+#include "core/object/callable_mp.h"
 
 #include "../opendust_agent_server.h"
 

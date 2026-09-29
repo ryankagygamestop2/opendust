@@ -538,11 +538,11 @@ Variant OpenDustJSON::coerce(const Variant &p_value, Variant::Type p_type, const
 			}
 			return value;
 		case Variant::PACKED_STRING_ARRAY:
-			return is_array ? Variant(a).operator PackedStringArray() : value;
+			return is_array ? Variant(Variant(a).operator PackedStringArray()) : value;
 		case Variant::PACKED_INT32_ARRAY:
-			return is_array ? Variant(a).operator PackedInt32Array() : value;
+			return is_array ? Variant(Variant(a).operator PackedInt32Array()) : value;
 		case Variant::PACKED_FLOAT32_ARRAY:
-			return is_array ? Variant(a).operator PackedFloat32Array() : value;
+			return is_array ? Variant(Variant(a).operator PackedFloat32Array()) : value;
 		default:
 			return value;
 	}

@@ -13,6 +13,7 @@
 #include "core/object/ref_counted.h"
 #include "world_drive.h"
 
+class Node;
 class OSKernel;
 class OSShell;
 

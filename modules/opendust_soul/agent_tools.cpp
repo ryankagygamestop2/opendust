@@ -30,6 +30,7 @@
 /**************************************************************************/
 
 #include "agent_tools.h"
+#include "core/object/callable_mp.h"
 
 #include "agent_body.h"
 #include "soul.h"

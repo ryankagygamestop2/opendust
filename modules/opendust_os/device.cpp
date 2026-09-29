@@ -9,6 +9,7 @@
 /**************************************************************************/
 
 #include "device.h"
+#include "core/object/class_db.h"
 
 #include "os_kernel.h"
 

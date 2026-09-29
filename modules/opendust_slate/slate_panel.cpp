@@ -30,6 +30,8 @@
 /**************************************************************************/
 
 #include "slate_panel.h"
+#include "core/object/class_db.h"
+#include "core/object/callable_mp.h"
 
 #include "room.h"
 
@@ -62,7 +64,7 @@ static Ref<StyleBoxFlat> _flat(const Color &p_color, int p_radius, int p_margin)
 }
 
 void SlatePanel::_build_ui() {
-	add_theme_stylebox_override(SNAME("panel"), _flat(COLOR_BG, 12, 12));
+	add_theme_style_override(SNAME("panel"), _flat(COLOR_BG, 12, 12));
 	set_anchors_and_offsets_preset(Control::PRESET_FULL_RECT);
 
 	root_vbox = memnew(VBoxContainer);
@@ -99,8 +101,8 @@ void SlatePanel::_build_ui() {
 	// Input.
 	input = memnew(LineEdit);
 	input->set_placeholder("say something to the slate");
-	input->add_theme_stylebox_override(SNAME("normal"), _flat(COLOR_PANEL, 8, 10));
-	input->add_theme_stylebox_override(SNAME("focus"), _flat(COLOR_PANEL, 8, 10));
+	input->add_theme_style_override(SNAME("normal"), _flat(COLOR_PANEL, 8, 10));
+	input->add_theme_style_override(SNAME("focus"), _flat(COLOR_PANEL, 8, 10));
 	input->add_theme_color_override(SNAME("font_color"), COLOR_TEXT);
 	input->add_theme_font_size_override(SNAME("font_size"), normal_font_size);
 	input->connect(SNAME("text_submitted"), callable_mp(this, &SlatePanel::_on_text_submitted));
@@ -301,7 +303,7 @@ void SlatePanel::_on_tool_use(const String &p_id, const String &p_name, const Di
 	ToolCard tc;
 	tc.name = p_name;
 	tc.card = memnew(PanelContainer);
-	tc.card->add_theme_stylebox_override(SNAME("panel"), _flat(COLOR_CARD, 8, 8));
+	tc.card->add_theme_style_override(SNAME("panel"), _flat(COLOR_CARD, 8, 8));
 	tc.card->set_h_size_flags(Control::SIZE_EXPAND_FILL);
 
 	VBoxContainer *vb = memnew(VBoxContainer);

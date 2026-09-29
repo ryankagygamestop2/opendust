@@ -30,6 +30,7 @@
 /**************************************************************************/
 
 #include "agent_body.h"
+#include "core/object/class_db.h"
 
 #include "agent_tools.h"
 
@@ -429,7 +430,7 @@ void AgentBody::_physics_step(double p_delta) {
 		if (to.length_squared() > 0.0001) {
 			real_t want_yaw = Math::atan2(-to.x, -to.z);
 			Vector3 rot = get_rotation();
-			real_t diff = Math::wrapf(want_yaw - rot.y, -Math::PI, Math::PI);
+			real_t diff = (real_t)Math::wrapf((double)(want_yaw - rot.y), -Math::PI, Math::PI);
 			real_t step = turn_speed * p_delta;
 			rot.y += CLAMP(diff, -step, step);
 			set_rotation(rot);

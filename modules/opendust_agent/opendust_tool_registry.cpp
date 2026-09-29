@@ -30,6 +30,7 @@
 /**************************************************************************/
 
 #include "opendust_tool_registry.h"
+#include "core/object/class_db.h"
 
 #include "core/object/object.h"
 #include "core/variant/variant.h"

@@ -30,6 +30,8 @@
 /**************************************************************************/
 
 #include "opendust_editor_tools.h"
+#include "core/object/class_db.h"
+#include "core/object/callable_mp.h"
 
 #include "../opendust_json.h"
 #include "../opendust_node_utils.h"

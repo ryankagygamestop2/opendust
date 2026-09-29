@@ -30,6 +30,7 @@
 /**************************************************************************/
 
 #include "soul_session_prompt.h"
+#include "core/object/class_db.h"
 
 #include "agent_body.h"
 

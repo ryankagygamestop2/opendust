@@ -9,6 +9,7 @@
 /**************************************************************************/
 
 #include "os_tools.h"
+#include "core/object/callable_mp.h"
 
 #include "os_kernel.h"
 

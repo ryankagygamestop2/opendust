@@ -31,6 +31,8 @@
 
 #pragma once
 
+#include "core/variant/array.h"
+
 #include "core/object/object_id.h"
 #include "core/string/ustring.h"
 #include "core/templates/hash_map.h"
