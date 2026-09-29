@@ -262,7 +262,7 @@ Error OpenDustAgentServer::start(Mode p_mode) {
 
 	running = true;
 	set_process_internal(true);
-	print_line(vformat("OpenDust agent bridge (%s) listening on ws://127.0.0.1:%d — discovery: %s", _mode_name(), port, discovery_path));
+	print_line(vformat(U"OpenDust agent bridge (%s) listening on ws://127.0.0.1:%d — discovery: %s", _mode_name(), port, discovery_path));
 	emit_signal(SNAME("started"), port);
 	return OK;
 #endif

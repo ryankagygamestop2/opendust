@@ -56,7 +56,7 @@ String SoulParser::_name_from_title(const String &p_title) {
 	// "# soul.md · Oliver della Cura" -> "Oliver della Cura"
 	// "# Oliver" -> "Oliver"
 	String t = _clean_heading(p_title);
-	int sep = t.rfind("·");
+	int sep = t.rfind(U"·");
 	if (sep >= 0) {
 		return t.substr(sep + 1).strip_edges();
 	}
@@ -96,18 +96,18 @@ Dictionary SoulParser::parse_seed_line(const String &p_line) {
 		name = rest.substr(b0 + 2, b1 - b0 - 2).strip_edges();
 		tail = rest.substr(b1 + 2).strip_edges();
 		// Drop a leading separator: "·", "—", "-", ":".
-		if (tail.begins_with("·") || tail.begins_with("—") || tail.begins_with("-") || tail.begins_with(":")) {
+		if (tail.begins_with(U"·") || tail.begins_with(U"—") || tail.begins_with("-") || tail.begins_with(":")) {
 			tail = tail.substr(1).strip_edges();
 		}
 	} else {
 		tail = rest;
 	}
 
-	int arrow = tail.find("↳");
+	int arrow = tail.find(U"↳");
 	if (arrow >= 0) {
 		text = tail.substr(0, arrow).strip_edges();
 		String ptrs = tail.substr(arrow + 1).strip_edges();
-		Vector<String> parts = ptrs.split("·", false);
+		Vector<String> parts = ptrs.split(U"·", false);
 		for (int i = 0; i < parts.size(); i++) {
 			String p = parts[i].strip_edges();
 			if (!p.is_empty()) {
@@ -118,7 +118,7 @@ Dictionary SoulParser::parse_seed_line(const String &p_line) {
 		text = tail;
 	}
 	// Trailing separator left over from "text ·".
-	if (text.ends_with("·")) {
+	if (text.ends_with(U"·")) {
 		text = text.substr(0, text.length() - 1).strip_edges();
 	}
 

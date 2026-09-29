@@ -53,6 +53,12 @@ mouse_capture={
 ]
 }
 
+[opendust]
+
+agent/policy="open"
+agent/allowed_tools=PackedStringArray("world.node_call", "agent.spawn")
+agent/allow_spawn=true
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

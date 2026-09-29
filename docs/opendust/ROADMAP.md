@@ -17,10 +17,12 @@ Updated 2026-09-29. Honest about what's real.
 
 ### Not yet verified (phase 0 leftovers)
 
-- A windowed (non-headless) editor session: Agents dock visible, `editor.capture` returning pixels
-- The slate actually spawning `claude` and streaming into the panel in the demo
-- `AgentBody` spawn + `agent.perceive` with a real body in a scene
-- OS shell rendering on the tablet's screen, apps opening
+- [x] A windowed editor session: Agents dock visible, `editor.capture` returning pixels (2026-09-29 evening)
+- [x] The slate spawning `claude` and streaming into the panel: it ran `ls`, listed the room, said hi (2026-09-29)
+- [x] `AgentBody` spawn + `agent.perceive` with a real body in a scene; found and fixed: collision shape
+  was under the avatar node so the body fell through the floor, soul title didn't parse (Latin-1 literal),
+  body paths were scene-relative, spawn was a sibling of the Room (2026-09-29)
+- OS shell rendering on the tablet's screen, apps opening (the tablet renders; apps not yet exercised)
 - C++ unit tests build (`tests=yes`) and the soul parser tests pass
 - Linux/macOS builds
 

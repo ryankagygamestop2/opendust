@@ -111,7 +111,7 @@ String Soul::stratum_to_markdown(const String &p_stratum) const {
 				raw += glyph + " ";
 			}
 			if (!sname.is_empty()) {
-				raw += "**" + sname + "** · ";
+				raw += "**" + sname + U"** · ";
 			}
 			raw += text;
 		}

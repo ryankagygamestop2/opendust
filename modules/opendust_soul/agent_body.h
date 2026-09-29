@@ -38,6 +38,7 @@
 
 class AnimationPlayer;
 class Camera3D;
+class CollisionShape3D;
 class Label3D;
 class NavigationAgent3D;
 class SubViewport;
@@ -78,6 +79,7 @@ private:
 	SubViewport *vision_viewport = nullptr;
 	Camera3D *vision_camera = nullptr;
 	Node3D *avatar_root = nullptr;
+	CollisionShape3D *collision = nullptr;
 	AnimationPlayer *anim = nullptr;
 
 	// Motion state.
@@ -93,6 +95,7 @@ private:
 	ObjectID held_item;
 
 	void _build_avatar();
+	void _ensure_collision(Rig p_rig);
 	void _clear_avatar();
 	Rig _effective_rig() const;
 	void _physics_step(double p_delta);

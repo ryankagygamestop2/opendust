@@ -93,11 +93,7 @@ String AgentBodyRegistry::path_of(AgentBody *p_body) {
 	if (!p_body || !p_body->is_inside_tree()) {
 		return String();
 	}
-	SceneTree *tree = p_body->get_tree();
-	Node *scene = tree ? tree->get_current_scene() : nullptr;
-	if (scene && (scene == p_body || scene->is_ancestor_of(p_body))) {
-		return String(scene->get_path_to(p_body));
-	}
+	// Absolute from the tree root, as the protocol specifies for runtime paths (world.* accepts these).
 	return String(p_body->get_path());
 }
 
@@ -431,7 +427,34 @@ Dictionary AgentTools::_spawn(const Dictionary &p_params, const Dictionary &p_co
 			body->set_avatar_scene(scene);
 		}
 	}
-	root->add_child(body, true);
+	// Spawn inside a Room when there is one, so the body's room (and its slate cwd) resolve.
+	// Prefer the Room enclosing the `at` node, else the first Room in the scene.
+	Node *parent = root;
+	{
+		Node *anchor = nullptr;
+		if (p_params.has("at")) {
+			Variant at = p_params["at"];
+			if (at.get_type() == Variant::STRING || at.get_type() == Variant::NODE_PATH) {
+				anchor = root->get_node_or_null(NodePath(String(at)));
+			}
+		}
+		for (Node *n = anchor; n; n = n->get_parent()) {
+			if (n->is_class("Room")) {
+				parent = n;
+				break;
+			}
+		}
+		if (parent == root) {
+			TypedArray<Node> rooms = root->find_children("*", "Room", true, false);
+			if (!rooms.is_empty()) {
+				Node *first = Object::cast_to<Node>(rooms[0]);
+				if (first) {
+					parent = first;
+				}
+			}
+		}
+	}
+	parent->add_child(body, true);
 
 	if (p_params.has("at")) {
 		Variant at = p_params["at"];

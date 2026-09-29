@@ -71,7 +71,7 @@ void OpenDustAgentsDock::_refresh_status() {
 		return;
 	}
 	if (server->is_running()) {
-		status_label->set_text(vformat("Bridge: ws://127.0.0.1:%d  ·  %d agent(s)", server->get_port(), server->get_session_count()));
+		status_label->set_text(vformat(U"Bridge: ws://127.0.0.1:%d  ·  %d agent(s)", server->get_port(), server->get_session_count()));
 		discovery_label->set_text(server->get_discovery_path());
 	} else {
 		status_label->set_text("Bridge: stopped");
@@ -91,10 +91,10 @@ void OpenDustAgentsDock::_refresh_agents() {
 	for (int i = 0; i < sessions.size(); i++) {
 		Dictionary s = sessions[i];
 		String agent_id = s.get("agent_id", "");
-		String label = vformat("%s  ·  %s  ·  %s  ·  %d calls", String(s.get("agent_name", "agent")), agent_id.is_empty() ? String("pending") : agent_id, String(s.get("session_id", "")), (int)s.get("tool_calls", 0));
+		String label = vformat(U"%s  ·  %s  ·  %s  ·  %d calls", String(s.get("agent_name", "agent")), agent_id.is_empty() ? String("pending") : agent_id, String(s.get("session_id", "")), (int)s.get("tool_calls", 0));
 		String last = s.get("last_tool", "");
 		if (!last.is_empty()) {
-			label += "  ·  last: " + last;
+			label += String(U"  ·  last: ") + last;
 		}
 		int idx = agents_list->add_item(label);
 		agents_list->set_item_metadata(idx, s.get("session_id", ""));
@@ -206,7 +206,7 @@ OpenDustAgentsDock::OpenDustAgentsDock() {
 	set_v_size_flags(SIZE_EXPAND_FILL);
 
 	status_label = memnew(Label);
-	status_label->set_text("Bridge: starting…");
+	status_label->set_text(U"Bridge: starting…");
 	add_child(status_label);
 
 	discovery_label = memnew(Label);
@@ -219,7 +219,7 @@ OpenDustAgentsDock::OpenDustAgentsDock() {
 	add_child(buttons);
 
 	spawn_button = memnew(Button);
-	spawn_button->set_text("Spawn from soul…");
+	spawn_button->set_text(U"Spawn from soul…");
 	spawn_button->set_tooltip_text("Instantiate an agent body from a soul.md (requires the opendust_soul module).");
 	spawn_button->connect("pressed", callable_mp(this, &OpenDustAgentsDock::_on_spawn_pressed));
 	buttons->add_child(spawn_button);

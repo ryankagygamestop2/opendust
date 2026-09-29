@@ -108,6 +108,22 @@ void AgentBody::_clear_avatar() {
 	anim = nullptr;
 }
 
+void AgentBody::_ensure_collision(Rig p_rig) {
+	float height = p_rig == RIG_MALE ? 1.8f : (p_rig == RIG_FEMALE ? 1.65f : 1.72f);
+	float radius = p_rig == RIG_MALE ? 0.32f : (p_rig == RIG_FEMALE ? 0.28f : 0.30f);
+	if (!collision) {
+		collision = memnew(CollisionShape3D);
+		collision->set_name("Collision");
+		add_child(collision, false, INTERNAL_MODE_FRONT); // direct child of the body, on purpose
+	}
+	Ref<CapsuleShape3D> shape;
+	shape.instantiate();
+	shape->set_radius(radius);
+	shape->set_height(height);
+	collision->set_shape(shape);
+	collision->set_position(Vector3(0, height * 0.5f, 0));
+}
+
 void AgentBody::_build_avatar() {
 	_clear_avatar();
 
@@ -123,6 +139,9 @@ void AgentBody::_build_avatar() {
 		avatar_root = root3d;
 		add_child(avatar_root, false, INTERNAL_MODE_BACK);
 		anim = Object::cast_to<AnimationPlayer>(avatar_root->find_child("AnimationPlayer", true, false));
+		// The avatar scene is visuals only; the physics shape must be a direct child of this body
+		// or CharacterBody3D ignores it and the body falls through the floor.
+		_ensure_collision(_effective_rig());
 		return;
 	}
 
@@ -155,15 +174,7 @@ void AgentBody::_build_avatar() {
 	head->set_position(Vector3(0, height - 0.1f, 0));
 	avatar_root->add_child(head);
 
-	Ref<CapsuleShape3D> shape;
-	shape.instantiate();
-	shape->set_radius(radius);
-	shape->set_height(height);
-	CollisionShape3D *col = memnew(CollisionShape3D);
-	col->set_name("Collision");
-	col->set_shape(shape);
-	col->set_position(Vector3(0, height * 0.5f, 0));
-	avatar_root->add_child(col);
+	_ensure_collision(r);
 
 	// Eyes sit at head height for whatever rig this is.
 	eyes->set_position(Vector3(0, height - 0.1f, 0));

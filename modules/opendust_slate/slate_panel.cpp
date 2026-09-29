@@ -142,7 +142,7 @@ void SlatePanel::_refresh_room_label() {
 	}
 	if (room) {
 		String label = room->get_display_name().is_empty() ? room->get_room_id() : room->get_display_name();
-		status_room->set_text(label + "  ·  " + room->get_absolute_dir());
+		status_room->set_text(label + U"  ·  " + room->get_absolute_dir());
 	} else if (session.is_valid() && !session->get_cwd().is_empty()) {
 		status_room->set_text(session->get_cwd());
 	} else {
